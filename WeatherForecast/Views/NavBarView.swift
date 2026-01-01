@@ -31,6 +31,37 @@ struct NavBarView: View {
             .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 12))
             .shadow(radius: 3, y: 2)
             .padding(.horizontal)
+            
+            
+            //api test button
+//            Button {
+//               Task {
+//                   await vm.testWeatherService()
+//               }
+//           } label: {
+//               Text("🧪 Test API")
+//                   .padding()
+//                   .background(Color.blue)
+//                   .foregroundColor(.white)
+//                   .cornerRadius(8)
+//           }
+//           .padding()
+            //location service test
+//            Button {
+//                Task {
+//                    await vm.testLocationManager()
+//                }
+//            } label: {
+//                Text("🧪 Test LocationManager")
+//                    .padding()
+//                    .background(Color.green)
+//                    .foregroundColor(.white)
+//                    .cornerRadius(8)
+//            }
+//            .padding()
+            
+            
+            
 
             // 🌤 Tabs
             TabView(selection: $vm.selectedTab) {

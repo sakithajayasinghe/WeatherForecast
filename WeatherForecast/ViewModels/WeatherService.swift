@@ -8,9 +8,59 @@
 import Foundation
 @MainActor
 final class WeatherService {
-    private let apiKey = "8xxxxxxxxxxxxxxxxxxxxx8"
+    private let apiKey = "a26cd264d787d61abe6234a3f82a0501"
 
     func fetchWeather(lat: Double, lon: Double) async throws -> WeatherResponse {
+        
+        //build the url
+        let baseURL = "https://api.openweathermap.org/data/3.0/onecall"
+        var components = URLComponents(string: baseURL)
+        components?.queryItems = [
+            URLQueryItem(name: "lat", value: String(lat)),
+            URLQueryItem(name: "lon", value: String(lon)),
+            URLQueryItem(name: "exclude", value: "minutely,hourly"),
+            URLQueryItem(name: "appid", value: apiKey)
+        ]
+        
+        //validate url
+        guard let url = components?.url else {
+            throw WeatherMapError.invalidURL(baseURL)
+        }
+        
+        //perform network request with await
+        do {
+            let(data, response) = try await URLSession.shared.data(from: url)
+            
+            //validate http response status code
+            guard let httpResponse = response as? HTTPURLResponse else {
+                throw WeatherMapError.invalidResponse(statusCode: 0)
+            }
+            
+            guard (200...299).contains(httpResponse.statusCode) else {
+                throw WeatherMapError.invalidResponse(statusCode: httpResponse.statusCode)
+            }
+            
+            //decode json response
+            let decoder = JSONDecoder()
+            let weatherResponse = try decoder.decode(WeatherResponse.self, from: data)
+            return weatherResponse
+        } catch let error as WeatherMapError{
+            throw error
+        } catch let decodingError as DecodingError{
+            throw WeatherMapError.decodingError(decodingError)
+        } catch {
+            throw WeatherMapError.networkError(error)
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         // Constructs a URL for the OpenWeatherMap OneCall API using the provided coordinates and API key.
         // Performs an asynchronous network request using URLSession.
         // Validates the HTTP response status code.

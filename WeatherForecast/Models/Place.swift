@@ -15,7 +15,11 @@ final class Place {
     var name: String
     var latitude: Double
     var longitude: Double
-    var lastUsedAt: Date 
+    var lastUsedAt: Date
+    
+    //Relationship - one place have many POIs
+    @Relationship(deleteRule: .cascade, inverse: \AnnotationModel.place)
+    var pois: [AnnotationModel] = []
 
     init(
         id: UUID = UUID(),
@@ -37,6 +41,8 @@ final class AnnotationModel: Identifiable {
     var name: String
     var latitude: Double
     var longitude: Double
+    //each poi belong to one place
+    var place: Place?
 
 
     init(name: String, latitude: Double, longitude: Double) {
