@@ -269,23 +269,26 @@ final class MainAppViewModel: ObservableObject {
             }
             print("✅ Successfully loaded all data for \(place.name)")
         }
+    }
+    
+    func delete(place: Place) {
+        // Deletes the given `Place` object from the ModelContext and removes it from the `visited` array.
+        // Attempts to save the context.
+        context.delete(place)
         
-        func delete(place: Place) {
-            // Deletes the given `Place` object from the ModelContext and removes it from the `visited` array.
-            // Attempts to save the context.
-            context.delete(place)
-            
-            //remove from visited array
-            visited.removeAll { $0.id == place.id }
-            
-            //save context
-            do {
-                try context.save()
-            } catch {
-                print("Failed to save after deletion: \(error)")
-                appError = .missingData(message: "Failed to delete location")
-            }
+        //remove from visited array
+        visited.removeAll { $0.id == place.id }
+        
+        //save context
+        do {
+            try context.save()
+        } catch {
+            print("Failed to save after deletion: \(error)")
+            appError = .missingData(message: "Failed to delete location")
         }
+    }
+        
+
         
         
         
@@ -360,5 +363,4 @@ final class MainAppViewModel: ObservableObject {
         
         
         
-    }
 }
